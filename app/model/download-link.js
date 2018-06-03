@@ -13,12 +13,11 @@ class DownloadLink{
             (
                 id int NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 drive_id nvarchar(255),
-                drive_name NVARCHAR(255),
-                drive_download_url text,
-                drive_parent_id NVARCHAR(255),
-                drive_parent_name NVARCHAR(255),
-                status nvarchar(255),
-                drive_length_file nvarchar(255)
+                drive_mime_type NVARCHAR(255),
+                drive_title nvarchar(255),
+                drive_path NVARCHAR(1000),
+                drive_file_size int,
+                status nvarchar(255)
             )
         `);
     }
@@ -27,11 +26,11 @@ class DownloadLink{
         return await this.mysqlConnector.sqlExcute(`
             INSERT INTO download_link
             (
-                drive_id, drive_name, drive_download_url, drive_parent_id, drive_parent_name, drive_length_file
+                drive_id, drive_mime_type, drive_title, drive_path, drive_file_size
             )
             VALUES
             (
-                '${ data.drive_id }', '${data.drive_name}', '${data.drive_download_url}', '${data.drive_parent_id}', '${data.drive_parent_name}', '${data.drive_length_file}'
+                '${ data.drive_id }', '${data.drive_mime_type}', '${data.drive_title}', '${data.drive_path}', '${ data.drive_file_size }'
             )
         `);
     }
@@ -44,7 +43,7 @@ class DownloadLink{
 
     async get(){
         return await this.mysqlConnector.sqlExcute(`
-            select id, drive_id, drive_name, drive_download_url, drive_parent_id, drive_parent_name, drive_length_file
+            select *
             from download_link where status is null
         `)
     }

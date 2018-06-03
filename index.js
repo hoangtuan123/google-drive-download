@@ -8,7 +8,5 @@ googleDrive.createCredential().then(
     async (success) => {
         await googleDrive.getData();
         await googleDrive.downloadURLs();
-        //await googleDrive.getAllFileByFolderId();
     },
     (err) => console.log(err));
-//

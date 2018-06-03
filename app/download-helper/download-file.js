@@ -45,6 +45,20 @@ class DownloadFile {
             return fs.mkdirSync(dir);
         else return false;
     }
+
+    async createFolderWithinSub(dir){
+        const dirs = dir.split('/');
+        console.log(dirs);
+        let folder = '';
+        for(const item of dirs){
+            folder+= item + '/';
+            console.log(folder);
+            if(item != '.')
+                await this.createFolder(folder);
+        }
+        return true;
+    }
+
 }
 
 module.exports = DownloadFile;
