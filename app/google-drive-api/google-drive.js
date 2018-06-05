@@ -12,7 +12,7 @@ class GoogleDrive {
         this.downloadLinkModel = new DownloadLinkModel();
         this.downloadFile = new DownloadFile();
         this.path = PATH_VIDEO;
-        this.folderId = process.env.FOLDER_ID;
+        this.folderId = "";
     }
 
     async createCredential() {
@@ -26,7 +26,21 @@ class GoogleDrive {
         this.downloadLinkModel.createTable();
     }
 
+    async choiceMode(){
+        console.log('Please choice mode:');
+        console.log('1. Find out and download file from google drive');
+        console.log('2. Find out file from google drive and insert link to db');
+        console.log('3. Download file with link from db');
+        return await this.authGoogle.readLine('input key: ');
+    }
+
     async getData() {
+        console.log('Please input key of folder:');
+        this.folderId = await this.authGoogle.readLine('input key: ');
+
+        if(!this.folderId)
+            return false;
+
         const childrenFolder = await this.getChildrenFolder(this.folderId);
 
         const files = await this.getAllFileOnFolderByFolderId(this.folderId, this.path);
@@ -57,18 +71,23 @@ class GoogleDrive {
         const total = files.length;
         let index = 1;
         for (const file of files) {
-            const filePath = file.drive_path;
-            const folderPath = file.drive_path.replace('/' + file.drive_title, '');
-
-            console.log(filePath);
-            console.log(folderPath);
-
-            const isExistsFolder = await this.downloadFile.createFolderWithinSub(folderPath);
-            const rs = await this.downloadFile.donwloadGoogleDrive(file.drive_id, filePath, this.auth, file.drive_file_size);
-            const updateStatus = await this.downloadLinkModel.updateStatus(file.id);
-
-            console.log('download file info', rs);
-            console.log(`download file ${Math.floor(index / total * 100)}%`);
+            try {
+                const filePath = file.drive_path;
+                const folderPath = file.drive_path.replace('/' + file.drive_title, '');
+    
+                console.log(filePath);
+                console.log(folderPath);
+    
+                const isExistsFolder = await this.downloadFile.createFolderWithinSub(folderPath);
+                const rs = await this.downloadFile.donwloadGoogleDrive(file.drive_id, filePath, this.auth, file.drive_file_size);
+                const updateStatus = await this.downloadLinkModel.updateStatus(file.id);
+                console.log('download file info', rs);
+                console.log(`download file ${Math.floor(index / total * 100)}%`);
+            } catch (error) {
+                console.log('error', error);
+                continue;                
+            }
+            
             index++;
         }
 
