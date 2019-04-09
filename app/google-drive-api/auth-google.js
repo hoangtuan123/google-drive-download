@@ -12,7 +12,6 @@ const GOOGLE_DIRVE_FILE = "drive#file";
 const SCOPES = ['https://www.googleapis.com/auth/drive'];
 const TOKEN_PATH = 'credentials.json';
 const CLIENT_SERECT = 'client_secret.json';
-const PATH = './videos';
 
 class AuthGoogle {
 

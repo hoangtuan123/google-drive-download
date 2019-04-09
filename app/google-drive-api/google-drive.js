@@ -3,7 +3,7 @@ const { google } = require('googleapis');
 const AuthGoogle = require('./auth-google');
 const DownloadLinkModel = require('../model/download-link');
 const DownloadFile = require('../download-helper/download-file');
-const PATH_VIDEO = './videos'
+const PATH_VIDEO = '/files'
 const MIME_TYPE_FOLDER = 'application/vnd.google-apps.folder';
 
 class GoogleDrive {
@@ -11,7 +11,7 @@ class GoogleDrive {
         this.authGoogle = new AuthGoogle();
         this.downloadLinkModel = new DownloadLinkModel();
         this.downloadFile = new DownloadFile();
-        this.path = PATH_VIDEO;
+        this.path = __dirname + PATH_VIDEO;
         this.folderId = "";
     }
 
