@@ -4,7 +4,7 @@ class DownloadLink{
     
     constructor(){
         this.mysqlConnector = new MySQLConnector();
-        this.mysqlConnector.openConnect();
+        //this.mysqlConnector.openConnect();
     }
 
     async createTable(){
